@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import moment from 'moment';
 import { useState, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 import useDebounce from '../hooks/useDebounce';
@@ -7,6 +8,8 @@ export default function Home() {
   const [jobs, setJobs] = useState([]);
   const [search, setSearch] = useState(null);
   const debouncedSearch = useDebounce(search, 500);
+  moment.locale();
+
   useEffect(() => {
     async function fetchJobs() {
       const data = await fetch(
@@ -16,6 +19,7 @@ export default function Home() {
     }
     fetchJobs();
   }, [debouncedSearch]);
+  const date = moment(jobs.data?.created_at).format('lll');
   return (
     <div className={styles.container}>
       <Head>
@@ -30,6 +34,31 @@ export default function Home() {
           placeholder="Pesquisar"
           onChange={(e) => setSearch(e.target.value)}
         />
+        {jobs.data
+          ?.filter((value) => {
+            if (debouncedSearch === ``) {
+              return value;
+            } else if (debouncedSearch === null) {
+              return value;
+            } else if (
+              value.title?.toLowerCase().startsWith(search?.toLowerCase())
+            ) {
+              return value;
+            }
+          })
+          .map((job) => {
+            return (
+              <div key={job.slug}>
+                <div className="title-container">
+                  <h4>{job.title}</h4>
+                  <p>{date}</p>
+                </div>
+                <p>{job.company_name}</p>
+                <div>icone {job.remote ? 'Remoto' : `${job.location}`}</div>
+                <a href={job.url}>clique aqui</a>
+              </div>
+            );
+          })}
       </main>
     </div>
   );
