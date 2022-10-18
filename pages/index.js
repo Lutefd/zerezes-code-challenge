@@ -3,16 +3,28 @@ import { useState, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 import Job from './Job';
 import { useFetch } from '../hooks/useFetch';
+import paginate from '../utils/paginate';
 export default function Home() {
   const { jobs, debouncedSearch, setSearch, loading } = useFetch();
   const [page, setPage] = useState(0);
   const [items, setItems] = useState([]);
-
+  const jobsFilter = jobs.data?.filter((value) => {
+    if (debouncedSearch === ``) {
+      return value;
+    } else if (debouncedSearch === null) {
+      return value;
+    } else if (
+      value.title?.toLowerCase().startsWith(debouncedSearch?.toLowerCase())
+    ) {
+      return value;
+    }
+  });
   useEffect(() => {
     if (loading) return;
-    setItems(jobs[page]);
+    setItems(jobs);
   }, [loading]);
-
+  const jobsFilterCalc = Math.ceil(jobsFilter?.length / 10);
+  console.log(jobsFilterCalc);
   return (
     <div className={styles.container}>
       <Head>
@@ -29,27 +41,13 @@ export default function Home() {
         />
         <section className="Job-listing">
           <div className="container">
-            {items
-              ?.filter((value) => {
-                if (debouncedSearch === ``) {
-                  return value;
-                } else if (debouncedSearch === null) {
-                  return value;
-                } else if (
-                  value.title
-                    ?.toLowerCase()
-                    .startsWith(debouncedSearch?.toLowerCase())
-                ) {
-                  return value;
-                }
-              })
-              .map((job) => {
-                return <Job key={job.slug} {...job} />;
-              })}
+            {paginate(jobsFilter, page)?.map((job) => {
+              return <Job key={job.slug} {...job} />;
+            })}
           </div>
-          {!loading && (
+          {/* {!loading && (
             <div className="btn-container">
-              {jobs.map((item, index) => {
+              {jobsFilterCalc?.map((item, index) => {
                 return (
                   <button key={index} className="page-btn">
                     botao
@@ -57,7 +55,7 @@ export default function Home() {
                 );
               })}
             </div>
-          )}
+          )} */}
         </section>
       </main>
     </div>
