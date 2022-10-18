@@ -1,25 +1,18 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import moment from 'moment';
 import { useState, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
-import useDebounce from '../hooks/useDebounce';
+import Job from './Job';
+import { useFetch } from '../hooks/useFetch';
 export default function Home() {
-  const [jobs, setJobs] = useState([]);
-  const [search, setSearch] = useState(null);
-  const debouncedSearch = useDebounce(search, 500);
-  moment.locale();
+  const { jobs, debouncedSearch, setSearch, loading } = useFetch();
+  const [page, setPage] = useState(0);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
-    async function fetchJobs() {
-      const data = await fetch(
-        `https://www.arbeitnow.com/api/job-board-api`
-      ).then((res) => res.json());
-      setJobs(data);
-    }
-    fetchJobs();
-  }, [debouncedSearch]);
-  const date = moment(jobs.data?.created_at).format('lll');
+    if (loading) return;
+    setItems(jobs[page]);
+  }, [loading]);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -34,31 +27,38 @@ export default function Home() {
           placeholder="Pesquisar"
           onChange={(e) => setSearch(e.target.value)}
         />
-        {jobs.data
-          ?.filter((value) => {
-            if (debouncedSearch === ``) {
-              return value;
-            } else if (debouncedSearch === null) {
-              return value;
-            } else if (
-              value.title?.toLowerCase().startsWith(search?.toLowerCase())
-            ) {
-              return value;
-            }
-          })
-          .map((job) => {
-            return (
-              <div key={job.slug}>
-                <div className="title-container">
-                  <h4>{job.title}</h4>
-                  <p>{date}</p>
-                </div>
-                <p>{job.company_name}</p>
-                <div>icone {job.remote ? 'Remoto' : `${job.location}`}</div>
-                <a href={job.url}>clique aqui</a>
-              </div>
-            );
-          })}
+        <section className="Job-listing">
+          <div className="container">
+            {items
+              ?.filter((value) => {
+                if (debouncedSearch === ``) {
+                  return value;
+                } else if (debouncedSearch === null) {
+                  return value;
+                } else if (
+                  value.title
+                    ?.toLowerCase()
+                    .startsWith(debouncedSearch?.toLowerCase())
+                ) {
+                  return value;
+                }
+              })
+              .map((job) => {
+                return <Job key={job.slug} {...job} />;
+              })}
+          </div>
+          {!loading && (
+            <div className="btn-container">
+              {jobs.map((item, index) => {
+                return (
+                  <button key={index} className="page-btn">
+                    botao
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </section>
       </main>
     </div>
   );
