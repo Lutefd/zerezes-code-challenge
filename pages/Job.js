@@ -3,19 +3,27 @@ import moment from 'moment';
 const Job = ({ company_name, title, remote, url, location, created_at }) => {
   const date = moment.unix(created_at).format('lll');
   return (
-    <article className="card-body">
-      <div className="card-title">
-        <h3>{title}</h3>
-        <p>Criado em: {date}</p>
-      </div>
-      <div className="">
-        <div className="">
-          <h4>{company_name}</h4>
-          <h5>Icon {remote ? 'Remoto' : `${location}`}</h5>
+    <article className="card">
+      <div className="card-body bg-base-200 mt-2 rounded-lg">
+        <div className="card-title flex-col">
+          <h3 className="justify-self-center text-center">{title}</h3>
+          <p className="text-sm">Criado em: {date}</p>
         </div>
-        <a href={url} className="btn btn-secondary">
-          Saiba Mais
-        </a>
+        <div className="flex justify-between mt-4 ">
+          <div className="">
+            <h4 className="flex gap-2">
+              <img src="/briefcase-solid.svg" className="w-3" />
+              {company_name}
+            </h4>
+            <h5 className="flex gap-2">
+              <img src="/location-dot-solid.svg" className="w-3" />{' '}
+              {remote ? 'Remoto' : `${location}`}
+            </h5>
+          </div>
+          <a href={url} className="btn btn-accent">
+            Saiba Mais
+          </a>
+        </div>
       </div>
     </article>
   );
