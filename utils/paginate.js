@@ -1,5 +1,6 @@
+import { Constants } from './constants';
 const paginate = (elements, page) => {
-  const elementsPerPage = 12;
+  const { elementsPerPage } = Constants();
   const start = page * elementsPerPage;
   return elements?.slice(start, start + elementsPerPage);
 };

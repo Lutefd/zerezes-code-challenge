@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import useDebounce from './useDebounce';
+import { Constants } from '../utils/constants';
 export const useFetch = () => {
+  const { timeoutValue } = Constants();
   const [jobs, setJobs] = useState([]);
   const [search, setSearch] = useState(null);
   const [loading, setLoading] = useState(true);
-  const debouncedSearch = useDebounce(search, 500);
+  const debouncedSearch = useDebounce(search, timeoutValue);
 
   useEffect(() => {
     async function fetchJobs() {
