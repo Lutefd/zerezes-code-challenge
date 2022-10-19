@@ -1,6 +1,6 @@
-const paginate = (jobs, index) => {
-  const jobsPerPage = 10;
-  const start = index * jobsPerPage;
-  return jobs?.slice(start, start + jobsPerPage);
+const paginate = (elements, page) => {
+  const elementsPerPage = 12;
+  const start = page * elementsPerPage;
+  return elements?.slice(start, start + elementsPerPage);
 };
 export default paginate;
