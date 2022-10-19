@@ -21,10 +21,12 @@ export default function Home() {
   });
   useEffect(() => {
     if (loading) return;
-    setItems(jobs);
-  }, [loading]);
+    setItems(paginate(jobsFilter, page));
+  }, [loading, page]);
   const jobsFilterCalc = Math.ceil(jobsFilter?.length / 10);
-  console.log(jobsFilterCalc);
+  const handlePage = (index) => {
+    setPage(index);
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -45,17 +47,23 @@ export default function Home() {
               return <Job key={job.slug} {...job} />;
             })}
           </div>
-          {/* {!loading && (
+          {!loading && (
             <div className="btn-container">
-              {jobsFilterCalc?.map((item, index) => {
-                return (
-                  <button key={index} className="page-btn">
-                    botao
-                  </button>
-                );
-              })}
+              {jobsFilter
+                ?.filter((item, results) => results < jobsFilterCalc)
+                .map((item, index) => {
+                  return (
+                    <button
+                      key={index}
+                      className="page-btn"
+                      onClick={() => handlePage(index)}
+                    >
+                      {index + 1}
+                    </button>
+                  );
+                })}
             </div>
-          )} */}
+          )}
         </section>
       </main>
     </div>
