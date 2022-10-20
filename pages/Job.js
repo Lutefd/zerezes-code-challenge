@@ -19,7 +19,7 @@ const Job = ({ company_name, title, remote, url, location, created_at }) => {
               />
               {company_name}
             </h4>
-            <h5 className="flex gap-2">
+            <h5 className="flex gap-2 items-center">
               <img
                 src="/location-dot-solid.svg"
                 className="w-3"
@@ -28,7 +28,7 @@ const Job = ({ company_name, title, remote, url, location, created_at }) => {
               {remote ? 'Remoto' : `${location}`}
             </h5>
           </div>
-          <a href={url} className="btn btn-accent">
+          <a href={url} className="btn btn-accent self-center">
             Saiba Mais
           </a>
         </div>
