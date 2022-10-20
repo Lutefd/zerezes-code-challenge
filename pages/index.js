@@ -43,7 +43,7 @@ export default function Home() {
             target="_blank"
             rel="noreferrer"
           >
-            Zerezes Code Challenge
+            Zerezes Code Challenge ::)
           </a>
         </div>
       </nav>
@@ -72,9 +72,9 @@ export default function Home() {
           )}
           {!loading && (
             <div className="btn-group">
-              {filteredJobs
-                ?.filter((_, results) => results < amountOfPages)
-                .map((item, index) => {
+              {items
+                .filter((_, results) => results < amountOfPages)
+                .map((_, index) => {
                   return (
                     <button
                       key={index}
@@ -93,8 +93,10 @@ export default function Home() {
       </main>
       <footer className="navbar bg-base-300 mt-auto justify-center">
         <a
-          href="https://github.com/Lutefd/zerezes-code-challenge"
+          href="https://github.com/Lutefd/"
           className="link link-hover"
+          target="_blank"
+          rel="noreferrer"
         >
           Desafio feito por Luis Dourado
         </a>
