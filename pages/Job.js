@@ -1,7 +1,18 @@
 import React from 'react';
-import moment from 'moment';
+import { Constants } from '../utils/constants';
 const Job = ({ company_name, title, remote, url, location, created_at }) => {
-  const date = moment.unix(created_at).format('lll');
+  const { toMilliseconds } = Constants();
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  };
+  const date = new Date(created_at * toMilliseconds).toLocaleDateString(
+    'pt-br',
+    options
+  );
   return (
     <article className="card">
       <div className="card-body bg-base-200 mt-2 rounded-lg">
