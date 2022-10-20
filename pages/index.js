@@ -4,30 +4,17 @@ import Job from './Job';
 import { useFetch } from '../hooks/useFetch';
 import paginate from '../utils/paginate';
 import { Constants } from '../utils/constants';
+import filterJobs from '../utils/filter';
 export default function Home() {
   const { jobs, debouncedSearch, setSearch, loading } = useFetch();
   const { timeoutValue, elementsPerPage, initialPageIndex } = Constants();
   const [page, setPage] = useState(0);
-  const filteredJobs = jobs.data?.filter((value) => {
-    if (debouncedSearch === ``) {
-      return value;
-    } else if (debouncedSearch === null) {
-      return value;
-    } else if (
-      value.title?.toLowerCase().startsWith(debouncedSearch?.toLowerCase())
-    ) {
-      return value;
-    }
-  });
-  const [items, setItems] = useState([]);
-  const amountOfPages = Math.ceil(filteredJobs?.length / elementsPerPage);
+  const amountOfPages = Math.ceil(
+    filterJobs(jobs.data, debouncedSearch)?.length / elementsPerPage
+  );
   const handlePage = (index) => {
     setPage(index);
   };
-  useEffect(() => {
-    if (loading) return;
-    setItems(paginate(filteredJobs, page));
-  }, [loading, page]);
   return (
     <div className="min-h-screen flex flex-col">
       <Head>
@@ -65,14 +52,16 @@ export default function Home() {
         <section className="flex flex-col gap-5 justify-center items-center">
           {!loading && (
             <div className="container p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-              {paginate(filteredJobs, page)?.map((job) => {
-                return <Job key={job.slug} {...job} />;
-              })}
+              {paginate(filterJobs(jobs.data, debouncedSearch), page)?.map(
+                (job) => {
+                  return <Job key={job.slug} {...job} />;
+                }
+              )}
             </div>
           )}
           {!loading && (
             <div className="btn-group">
-              {filteredJobs
+              {filterJobs(jobs.data, debouncedSearch)
                 ?.filter((_, results) => results < amountOfPages)
                 .map((_, index) => {
                   return (
