@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Job from './Job';
 import { useFetch } from '../hooks/useFetch';
 import paginate from '../utils/paginate';
@@ -12,8 +12,29 @@ export default function Home() {
   const amountOfPages = Math.ceil(
     filterJobs(jobs.data, debouncedSearch)?.length / elementsPerPage
   );
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    setTimeout(() => {
+      handlePage(initialPageIndex);
+    }, timeoutValue);
+  };
   const handlePage = (index) => {
     setPage(index);
+  };
+  const renderPaginationButtons = () => {
+    return [...Array(amountOfPages)].map((_, index) => {
+      return (
+        <button
+          key={index}
+          className={`btn mb-3 ${
+            index === page ? 'btn-accent' : 'btn-outline btn-accent'
+          }`}
+          onClick={() => handlePage(index)}
+        >
+          {index + 1}
+        </button>
+      );
+    });
   };
   return (
     <div className="min-h-screen flex flex-col">
@@ -41,42 +62,21 @@ export default function Home() {
         <input
           type="search"
           placeholder="Pesquisar"
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setTimeout(() => {
-              handlePage(initialPageIndex);
-            }, timeoutValue);
-          }}
+          onChange={(e) => handleChange(e)}
           className="input input-bordered input-accent w-full max-w-xs"
         />
         <section className="flex flex-col gap-5 justify-center items-center">
           {!loading && (
-            <div className="container p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-              {paginate(filterJobs(jobs.data, debouncedSearch), page)?.map(
-                (job) => {
-                  return <Job key={job.slug} {...job} />;
-                }
-              )}
-            </div>
-          )}
-          {!loading && (
-            <div className="btn-group">
-              {filterJobs(jobs.data, debouncedSearch)
-                ?.filter((_, results) => results < amountOfPages)
-                .map((_, index) => {
-                  return (
-                    <button
-                      key={index}
-                      className={`btn mb-3 ${
-                        index === page ? 'btn-accent' : 'btn-outline btn-accent'
-                      }`}
-                      onClick={() => handlePage(index)}
-                    >
-                      {index + 1}
-                    </button>
-                  );
-                })}
-            </div>
+            <>
+              <div className="container p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+                {paginate(filterJobs(jobs.data, debouncedSearch), page)?.map(
+                  (job) => {
+                    return <Job key={job.slug} {...job} />;
+                  }
+                )}
+              </div>
+              <div className="btn-group">{renderPaginationButtons()}</div>
+            </>
           )}
         </section>
       </main>
