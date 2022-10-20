@@ -72,8 +72,8 @@ export default function Home() {
           )}
           {!loading && (
             <div className="btn-group">
-              {items
-                .filter((_, results) => results < amountOfPages)
+              {filteredJobs
+                ?.filter((_, results) => results < amountOfPages)
                 .map((_, index) => {
                   return (
                     <button
