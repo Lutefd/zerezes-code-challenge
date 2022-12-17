@@ -37,7 +37,7 @@ export default function Home() {
     });
   };
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Head>
         <title>Zerezes Code Challenge</title>
         <meta
@@ -47,10 +47,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <nav>
-        <div className="navbar bg-base-300 justify-center">
+        <div className="justify-center navbar bg-base-300">
           <a
             href="https://github.com/Lutefd/zerezes-code-challenge"
-            className="btn btn-ghost normal-case text-xl"
+            className="text-xl normal-case btn btn-ghost"
             target="_blank"
             rel="noreferrer"
           >
@@ -58,7 +58,7 @@ export default function Home() {
           </a>
         </div>
       </nav>
-      <main className="grid place-items-center	">
+      <main className="grid place-items-center">
         <a href="https://zerezes.com.br/" target="_blank" rel="noreferrer">
           <img src="zerezes-logo.svg" alt="Logo da Zerezes" />
         </a>
@@ -66,12 +66,12 @@ export default function Home() {
           type="search"
           placeholder="Pesquisar"
           onChange={(e) => handleChange(e)}
-          className="input input-bordered input-accent w-full max-w-xs"
+          className="w-full max-w-xs input input-bordered input-accent"
         />
-        <section className="flex flex-col gap-5 justify-center items-center">
+        <section className="flex flex-col items-center justify-center gap-5">
           {!loading && (
             <>
-              <div className="container p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+              <div className="container grid grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                 {paginate(filterJobs(jobs.data, debouncedSearch), page)?.map(
                   (job) => {
                     return <Job key={job.slug} {...job} />;
@@ -83,7 +83,7 @@ export default function Home() {
           )}
         </section>
       </main>
-      <footer className="navbar bg-base-300 mt-auto justify-center">
+      <footer className="mt-auto justify-center navbar bg-base-300">
         <a
           href="https://github.com/Lutefd/"
           className="link link-hover"

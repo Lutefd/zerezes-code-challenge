@@ -15,12 +15,12 @@ const Job = ({ company_name, title, remote, url, location, created_at }) => {
   );
   return (
     <article className="card">
-      <div className="card-body bg-base-200 mt-2 rounded-lg">
-        <div className="card-title flex-col">
+      <div className="mt-2 rounded-lg card-body bg-base-200">
+        <div className="flex-col card-title">
           <h3 className="justify-self-center text-center">{title}</h3>
           <p className="text-sm">Criado em: {date}</p>
         </div>
-        <div className="flex justify-between mt-4 ">
+        <div className="mt-4 flex justify-between">
           <div className="">
             <h4 className="flex gap-2">
               <img
@@ -30,7 +30,7 @@ const Job = ({ company_name, title, remote, url, location, created_at }) => {
               />
               {company_name}
             </h4>
-            <h5 className="flex gap-2 items-center">
+            <h5 className="flex items-center gap-2">
               <img
                 src="/location-dot-solid.svg"
                 className="w-3"
@@ -39,7 +39,7 @@ const Job = ({ company_name, title, remote, url, location, created_at }) => {
               {remote ? 'Remoto' : `${location}`}
             </h5>
           </div>
-          <a href={url} className="btn btn-accent self-center">
+          <a href={url} className="self-center btn btn-accent">
             Saiba Mais
           </a>
         </div>
